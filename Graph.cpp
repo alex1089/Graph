@@ -25,13 +25,14 @@ class Graph {
 		return false;	    // if two graphs have different amount of nodes, quit
 	    else {
 		int* test_ind = new int[this->two_d_array.size()];
-		for (int i=0;i<two_d_array.size();i++)
+		for (int i=0;i<size;i++)
 		    test_ind[i]=i;			    // populate test indices array with values 0 to size-1
+		int bijection_count = 0;		    // keeps track of bijections found
 
 		do {
 		    bool valid = true;
-		    for (int row=0; row<two_d_array.size();row++){
-			for (int col=0; col<two_d_array.size(); col++){
+		    for (int row=0; row<size;row++){
+			for (int col=0; col<size; col++){
 			    if (this->two_d_array[row][col] != graph2.two_d_array[test_ind[row]][test_ind[col]]){ // if graph1.node != graph2.node
 				valid=false;
 				break;		// break out of loop
@@ -41,13 +42,18 @@ class Graph {
 			    break;	// if prev row invalid, break to next permutation
 		    }
 		    if (valid){
-			for (int i=0;i<two_d_array.size();i++){
-			    cout<<node_mapping[test_ind[i]]<<" -> ";
+			++bijection_count;	// increment for every valid bijection;
+			if (bijection_count==1)
+			    cout<<"Bijections: \n";
+			for (int i=0;i<size;i++){
+			    cout<<i+1<<" -> ";
 			    cout<<graph2.node_mapping[test_ind[i]]<<" ";
+			    (i!=size-1)?(cout<<"| "):(cout<<endl);
 			}
-			cout<<endl;
 		    }
 		} while (next_permutation(test_ind, test_ind+size));
+		if (!bijection_count)	    // if no bijections found, not isomorphic
+		    cout<<"The Two Graphs Aren't Isomoprhic\n";
 		delete[] test_ind;
 	    }
 
@@ -56,6 +62,6 @@ class Graph {
 
 	std::string node_mapping;
 	int size; 
-	array<array<int, 5>, 5> two_d_array;
+	array<array<int, N>, N> two_d_array;
 };
 #endif
